@@ -24,7 +24,7 @@ url: "https://thepan.cn"
 favicon: images/favicon.png
 
 # Google Analytics id, e.g. "UA-NNNNNNNN-N"
-google_analytics: ""
+google_analytics: "G-GQ7CTST9N7"
 
 # Site navigation - each item must have a title and a url.
 navigation:
