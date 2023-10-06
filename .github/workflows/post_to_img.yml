@@ -1,0 +1,31 @@
+name: Output post to images
+
+on:
+  push:
+    branches:
+      - "master"
+      - "pdf-output"
+    paths:
+      - "_posts/**"
+
+jobs:
+  convert_to_image:
+    name: "Convert to image"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install mdimg
+        run: npm install -g mdimg
+
+      - name: Convert to image
+        run: |-
+          mkdir -p _output
+          for file in _posts/*.md; do
+            mdimg -i $file --css github -o _output/$(basename $file .md).png
+          done
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: output
+          path: _output
