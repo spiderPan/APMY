@@ -17,7 +17,7 @@ layout: default
       </figure><!-- .post-thumbnail -->
       {% endif %}
     </header><!-- .post-header -->
-    <div class="post-content">
+    <div id="post-content" class="post-content">
       {{content}}
     </div><!-- .post-content -->
     <div class="post-share">
@@ -26,6 +26,7 @@ layout: default
         href="https://twitter.com/intent/tweet?text={{ page.title | uri_escape }}&amp;url={{ page.url | absolute_url }}" rel="noopener">Twitter</a>
       <a target="_blank"
         href="https://www.facebook.com/sharer/sharer.php?u={{ page.url | absolute_url }}&amp;t={{ page.title | uri_escape }}" rel="noopener">Facebook</a>
+      <button id="download-btn">Download As Image</button>
     </div><!-- .share-post -->
     <div class="author-box">
       {% if site.data.author.image and site.data.author.image != "" %}

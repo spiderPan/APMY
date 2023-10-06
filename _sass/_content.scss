@@ -121,7 +121,12 @@
     font-size: 0.88889em;
     margin-right: 15px;
   }
-  a {
+  
+  button{
+    background: #fff;
+  }
+
+  a, button {
     border: 1px solid _palette(border);
     border-radius: 3px;
     color: _palette(primary);
