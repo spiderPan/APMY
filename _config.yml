@@ -66,11 +66,12 @@ sass:
 
 # Exclude
 exclude:
-  - .idea
+  - .idea/
+  - .github/
   - webpack.config.js
   - package.json
   - package-lock.json
-  - node_modules
+  - node_modules/
   - Gemfile
   - Gemfile.lock
   - compose.yaml
