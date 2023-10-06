@@ -4,7 +4,8 @@ let download_btn = document.getElementById('download-btn');
 
 if (download_btn) {
     download_btn.onclick = function () {
-        let post_content = document.getElementById('post-content');
+        let post_content = document.getElementById('post-content'),
+            post_title = document.getElementById('post-title');
 
         if (!post_content) {
             return;
@@ -20,7 +21,7 @@ if (download_btn) {
             })
             .then(function (dataUrl) {
                 var link = document.createElement('a');
-                link.download = 'my-image-name.jpeg';
+                link.download = post_title.innerText + '.jpeg';
                 link.href = dataUrl;
                 link.click();
             }).catch(function (error) {
