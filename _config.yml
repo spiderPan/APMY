@@ -63,3 +63,16 @@ markdown: kramdown
 sass:
   sass_dir: _sass
   style: compressed
+
+# Exclude
+exclude:
+  - .idea
+  - webpack.config.js
+  - package.json
+  - package-lock.json
+  - node_modules
+  - Gemfile
+  - Gemfile.lock
+  - compose.yaml
+  - Dockerfile
+  - README.md
