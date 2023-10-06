@@ -1,3 +1,5 @@
+.idea
+
 *.swp
 
 # Ruby Gem
@@ -15,3 +17,6 @@ vendor/bundle
 .sass-cache
 _asset_bundler_cache
 _site
+
+# Node
+node_modules/

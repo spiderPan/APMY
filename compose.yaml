@@ -2,8 +2,9 @@ version: '3'
 services:
   jekyll:
     build: .
-    command: bundle exec jekyll serve --watch --force_polling --host 0.0.0.0
+    command: npm run start
     ports:
       - "4000:4000"
     volumes:
       - .:/srv/jekyll
+      - /srv/jekyll/node_modules
