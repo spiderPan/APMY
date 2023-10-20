@@ -16,6 +16,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/.bin/webpack --watch | bundle exec jekyll serve --watch --force_polling --host 0.0.0.0 --incremental",
+    "build": "./node_modules/.bin/webpack | bundle exec jekyll build",
     "ci-build": "./node_modules/.bin/webpack"
   },
   "repository": {
