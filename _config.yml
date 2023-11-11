@@ -47,6 +47,7 @@ footer:
 # Plugins
 plugins:
   - jekyll-paginate
+  - jekyll-redirect-from
 
 # http://jekyllrb.com/docs/pagination/
 paginate: 3
@@ -54,7 +55,7 @@ paginate_path: '/page:num/'
 
 
 # Permalinks
-permalink: /:title
+permalink: /:year/:month/:day/:title
 
 # Conversion
 markdown: kramdown
