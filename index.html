@@ -11,7 +11,7 @@ layout: default
       <h2 class="post-title"><a href="{{ site.baseurl }}{{ post.url }}" rel="bookmark">{{post.title}}</a></h2>
       <div class="post-meta">
         {% assign authors = site.data.authors %}
-        {% assign author_key = page.author | default: "pan" %}
+        {% assign author_key = post.author | default: "pan" %}
         {% assign author = authors[author_key] | default: authors["pan"] %}
         By <span class="post-author">{{ author.name }}</span>{% if post.tags.size > 0 %}<span
           class="post-tags"> in
