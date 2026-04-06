@@ -36,7 +36,7 @@ jobs:
       - name: Setup NPM
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
       - run: npm ci && npm run ci-build
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
