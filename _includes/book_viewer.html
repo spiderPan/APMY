@@ -1,0 +1,46 @@
+<!-- StPageFlip Library -->
+<script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
+
+<div class="book-container" id="book-container-{{ include.prefix | slugify }}">
+  <div class="flip-book" id="flip-book-{{ include.prefix | slugify }}" style="margin: 0 auto; max-width: 100%;">
+    {% assign ext = include.extension | default: '.jpg' %}
+    
+    <!-- Cover/First Page -->
+    {% if include.has_first %}
+      <div class="page page-cover" data-density="hard">
+        <div class="page-content">
+          <img src="{{ include.base_url | relative_url }}{{ include.prefix }}{{ ext }}" alt="Cover">
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Internal Pages -->
+    {% assign start = 2 %}
+    {% if include.has_first == false or include.has_first == nil %}
+      {% assign start = 1 %}
+    {% endif %}
+    
+    {% for i in (start..include.count) %}
+      <div class="page">
+        <div class="page-content">
+          <img src="{{ include.base_url | relative_url }}{{ include.prefix }}{{ i }}{{ ext }}" alt="Page {{ i }}">
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="book-viewer-controls">
+    <button class="book-prev" aria-label="Previous Page">
+      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <div class="book-page-indicator">
+      <span class="current-page">1</span> / <span class="total-pages">{{ include.count }}</span>
+    </div>
+    <button class="book-next" aria-label="Next Page">
+      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+    <button class="book-fullscreen" aria-label="Toggle Fullscreen">
+      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+    </button>
+  </div>
+</div>
