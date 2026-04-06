@@ -3,7 +3,7 @@
 
 <div class="book-container" id="book-container-{{ include.prefix | slugify }}">
   <div class="flip-book" id="flip-book-{{ include.prefix | slugify }}" style="margin: 0 auto; max-width: 100%;">
-    {% assign ext = include.extension | default: '.jpg' %}
+    {% assign ext = include.extension | default: '.webp' %}
     
     <!-- Cover/First Page -->
     {% if include.has_first %}

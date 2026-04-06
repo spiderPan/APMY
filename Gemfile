@@ -1,5 +1,7 @@
 source "https://rubygems.org"
 
+gem "webrick"
+
 # This will help ensure the proper Jekyll version is running.
 gem "jekyll", "~> 4.0.0"
 

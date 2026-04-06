@@ -6,7 +6,8 @@
   "dependencies": {
     "dom-to-image": "^2.6.0",
     "qrcode": "^1.5.3",
-    "concurrently": "^8.2.1"
+    "concurrently": "^8.2.1",
+    "sharp": "^0.32.6"
   },
   "devDependencies": {
     "webpack": "^5.88.2",
@@ -14,8 +15,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx webpack --watch & bundle exec jekyll serve --watch --livereload --force_polling --host 0.0.0.0 --incremental",
+    "start": "bundle install && npx webpack --watch & bundle exec jekyll serve --watch --livereload --force_polling --host 0.0.0.0 --incremental",
     "build": "node_modules/.bin/webpack && bundle exec jekyll build",
+    "optimize-books": "node scripts/optimize-images.js",
     "qrcode": "./node_modules/.bin/qrcode -o qrcode.png",
     "ci-build": "./node_modules/.bin/webpack"
   },
