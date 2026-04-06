@@ -6,7 +6,7 @@
   "dependencies": {
     "dom-to-image": "^2.6.0",
     "qrcode": "^1.5.3",
-    "concurrently": "^8.2.1",
+    "concurrently": "^9.2.1",
     "sharp": "^0.32.6"
   },
   "devDependencies": {
