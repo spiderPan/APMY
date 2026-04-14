@@ -35,8 +35,8 @@ async function syncNotion() {
   }
 
   console.log("Querying Notion Database for 'In Review' posts...");
-  const response = await notion.dataSources.query({
-    data_source_id: databaseId,
+  const response = await notion.databases.query({
+    database_id: databaseId,
     filter: {
       property: "Status",
       status: {
