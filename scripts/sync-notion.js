@@ -49,18 +49,22 @@ async function syncNotion() {
   console.log(`Found ${pages.length} posts In Review.`);
 
   for (const page of pages) {
-    const title = page.properties.Name.title[0]?.plain_text || "Untitled";
-    const dateStr = page.properties.Date.date?.start || new Date().toISOString().split('T')[0];
-    const author = page.properties.Author.select?.name || "pan";
-    const description = page.properties.Description.rich_text[0]?.plain_text || "";
-    const tags = page.properties.Tags.multi_select.map(tag => tag.name);
+    const title = page.properties.Title?.title[0]?.plain_text || "Untitled";
+    const dateStr = page.properties["Publish Date"]?.date?.start || new Date().toISOString().split('T')[0];
+    const author = page.properties.Author?.select?.name || "pan";
+    const description = page.properties.Description?.rich_text[0]?.plain_text || "";
+    const tags = page.properties.Tags?.multi_select?.map(tag => tag.name) || [];
+    const wordCount = page.properties["Word Count"]?.number || 0;
     
     let featureImageUrl = "";
     if (page.properties["Feature Image"]?.files?.length > 0) {
       featureImageUrl = page.properties["Feature Image"].files[0].file.url;
     }
 
-    const slug = toSlug(title) || page.id;
+    let slug = page.properties.Slug?.rich_text[0]?.plain_text;
+    if (!slug) {
+      slug = toSlug(title) || page.id;
+    }
     const postFilename = `${dateStr}-${slug}.md`;
     let frontmatterImage = "";
 
@@ -91,6 +95,7 @@ author: "${author}"
 description: "${description}"
 tags: [${tags.join(', ')}]
 feature_image: "${frontmatterImage}"
+word_count: ${wordCount}
 ---
 
 ${mdString.parent}
