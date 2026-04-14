@@ -19,7 +19,9 @@
   @else {
 
     $result: ();
-    $index: if($index < 0, length($list) + $index + 1, $index);
+    @if $index < 0 {
+      $index: length($list) + $index + 1;
+    }
 
     @for $i from 1 through length($list) {
 
