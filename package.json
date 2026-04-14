@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "@notionhq/client": "^5.18.0",
+    "@notionhq/client": "^2.2.15",
     "concurrently": "^9.2.1",
     "dom-to-image": "^2.6.0",
     "dotenv": "^17.4.2",

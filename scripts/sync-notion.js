@@ -34,33 +34,36 @@ async function syncNotion() {
     process.exit(1);
   }
 
-  console.log("Querying Notion Database for 'Ready for Review' posts...");
+  console.log("Querying Notion Database for 'Ready to Review' posts...");
   const response = await notion.databases.query({
     database_id: databaseId,
     filter: {
       property: "Status",
       status: {
-        equals: "Ready for Review"
+        equals: "Ready to Review"
       }
     }
   });
 
   const pages = response.results;
-  console.log(`Found ${pages.length} posts ready for review.`);
+  console.log(`Found ${pages.length} posts Ready to Review.`);
 
   for (const page of pages) {
-    const title = page.properties.Name.title[0]?.plain_text || "Untitled";
-    const dateStr = page.properties.Date.date?.start || new Date().toISOString().split('T')[0];
-    const author = page.properties.Author.select?.name || "pan";
-    const description = page.properties.Description.rich_text[0]?.plain_text || "";
-    const tags = page.properties.Tags.multi_select.map(tag => tag.name);
+    const title = page.properties.Title?.title[0]?.plain_text || "Untitled";
+    const dateStr = page.properties["Publish Date"]?.date?.start || new Date().toISOString().split('T')[0];
+    const author = page.properties.Author?.select?.name || "pan";
+    const description = page.properties.Description?.rich_text[0]?.plain_text || "";
+    const tags = page.properties.Tags?.multi_select?.map(tag => tag.name) || [];
     
     let featureImageUrl = "";
     if (page.properties["Feature Image"]?.files?.length > 0) {
       featureImageUrl = page.properties["Feature Image"].files[0].file.url;
     }
 
-    const slug = toSlug(title) || page.id;
+    let slug = page.properties.Slug?.rich_text[0]?.plain_text;
+    if (!slug) {
+      slug = toSlug(title) || page.id;
+    }
     const postFilename = `${dateStr}-${slug}.md`;
     let frontmatterImage = "";
 
@@ -101,14 +104,14 @@ ${mdString.parent}
     fs.writeFileSync(postPath, frontmatter);
     console.log(`Created post at: ${postPath}`);
 
-    // Update Notion Status to 'In PR' so we don't fetch it again
-    console.log(`Updating Notion status for ${title} to 'In PR'...`);
+    // Update Notion Status to 'In Review' so we don't fetch it again
+    console.log(`Updating Notion status for ${title} to 'In Review'...`);
     await notion.pages.update({
       page_id: page.id,
       properties: {
         Status: {
           status: {
-            name: "In PR"
+            name: "In Review"
           }
         }
       }
