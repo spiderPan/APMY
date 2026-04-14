@@ -4,9 +4,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "dom-to-image": "^2.6.0",
-    "qrcode": "^1.5.4",
+    "@notionhq/client": "^5.18.0",
     "concurrently": "^9.2.1",
+    "dom-to-image": "^2.6.0",
+    "dotenv": "^17.4.2",
+    "notion-to-md": "^3.1.9",
+    "qrcode": "^1.5.4",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
