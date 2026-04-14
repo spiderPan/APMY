@@ -2,6 +2,8 @@
 layout: default
 ---
 
+<div id="reading-progress" class="reading-progress-bar"></div>
+
 <main class="main-content fadeInDown delay_075s">
 
   <article class="post">
@@ -56,3 +58,24 @@ layout: default
   {% endif %}
 
 </main><!-- .main-content -->
+
+<script>
+  // Reading Progress Bar
+  document.addEventListener('scroll', function() {
+    const progressBar = document.getElementById('reading-progress');
+    if (!progressBar) return;
+    const body = document.body;
+    const html = document.documentElement;
+    const windowHeight = window.innerHeight || html.clientHeight;
+    // Calculate total scrollable height
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const scrollableHeight = docHeight - windowHeight;
+    const scrollY = window.pageYOffset || html.scrollTop;
+    
+    let progress = 0;
+    if (scrollableHeight > 0) {
+      progress = (scrollY / scrollableHeight) * 100;
+    }
+    progressBar.style.width = progress + '%';
+  });
+</script>

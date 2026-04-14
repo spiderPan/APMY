@@ -41,12 +41,68 @@ layout: default
       {% if paginator.previous_page %}
       <a href="{{ paginator.previous_page_path | relative_url }}" class="newer-posts">&larr; Newer Posts</a>
       {% endif %}
-      <span class="page-number">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
       {% if paginator.next_page %}
-      <a href="{{ paginator.next_page_path | relative_url }}" class="older-posts">Older Posts &rarr;</a>
+      <a href="{{ paginator.next_page_path | relative_url }}" class="older-posts load-more-btn" id="load-more">Load More</a>
       {% endif %}
     </div>
   </nav><!-- .pagination -->
   {% endif %}
 
+  <!-- Load More Feed Logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const loadMoreBtn = document.getElementById("load-more");
+      const mainContent = document.querySelector(".main-content");
+      const paginationNav = document.querySelector(".pagination");
+
+      if (loadMoreBtn && mainContent) {
+        loadMoreBtn.addEventListener("click", function(e) {
+          e.preventDefault();
+          const nextUrl = this.getAttribute("href");
+
+          if (!nextUrl) return;
+
+          // Indicate loading
+          loadMoreBtn.innerHTML = "Loading... ⏳";
+          loadMoreBtn.style.opacity = "0.7";
+          loadMoreBtn.style.pointerEvents = "none";
+
+          fetch(nextUrl)
+            .then(response => response.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(html, "text/html");
+
+              // Extract posts from the next page
+              const newPosts = doc.querySelectorAll(".post");
+              
+              // Append to main content
+              newPosts.forEach(post => {
+                // Insert before the pagination nav
+                mainContent.insertBefore(post, paginationNav);
+              });
+
+              // Check if there's a next page after this one
+              const newLoadMoreBtn = doc.getElementById("load-more");
+              if (newLoadMoreBtn) {
+                // Update the button to point to the newest next page
+                loadMoreBtn.setAttribute("href", newLoadMoreBtn.getAttribute("href"));
+                loadMoreBtn.innerHTML = "Load More";
+                loadMoreBtn.style.opacity = "1";
+                loadMoreBtn.style.pointerEvents = "auto";
+              } else {
+                // No more pages
+                loadMoreBtn.remove();
+              }
+            })
+            .catch(err => {
+              console.error("Error loading next page:", err);
+              loadMoreBtn.innerHTML = "Error loading. Try again.";
+              loadMoreBtn.style.opacity = "1";
+              loadMoreBtn.style.pointerEvents = "auto";
+            });
+        });
+      }
+    });
+  </script>
 </main><!-- .site-main -->

@@ -2,6 +2,17 @@
    5. Content
    ========================================================================== */
 
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: var(--color-accent);
+  width: 0%;
+  z-index: 10000;
+  transition: width 0.1s ease;
+}
+
 .post {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -181,7 +192,7 @@
   }
 
   span {
-    color: _palette(meta);
+    color: var(--color-meta);
     display: inline-block;
     font-size: 0.88889em;
     margin-right: 15px;
@@ -192,9 +203,9 @@
   }
 
   a, button {
-    border: 1px solid _palette(border);
+    border: 1px solid var(--color-border);
     border-radius: 3px;
-    color: _palette(primary);
+    color: var(--color-primary);
     display: inline-block;
     font-size: 14px;
     margin-bottom: 0.5em;
@@ -216,9 +227,34 @@
     }
 
     &:hover {
-      border-color: _palette(accent);
-      color: _palette(accent);
+      border-color: var(--color-accent);
+      color: var(--color-accent);
     }
+  }
+}
+
+/* Load More Button */
+.load-more-btn {
+  display: block;
+  text-align: center;
+  margin: 40px auto;
+  padding: 15px 30px;
+  font-family: _font(primary);
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--color-surface) !important;
+  background: var(--color-accent) !important;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--color-accent) 40%, transparent);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 200px;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--color-accent) 60%, transparent);
+    text-decoration: none !important;
   }
 }
 
