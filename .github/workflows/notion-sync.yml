@@ -1,0 +1,55 @@
+name: Sync Notion to Jekyll
+
+on:
+  schedule:
+    - cron: "0 12 * * *" # Runs daily at noon UTC
+  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync_notion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Notion Sync Script
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: node scripts/sync-notion.js
+
+      - name: Ensure files were generated
+        id: check_changes
+        run: |
+          if [[ -z $(git status -s) ]]; then
+            echo "No new posts to sync."
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "New posts generated from Notion."
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "blog: Import latest Ready for Review posts from Notion"
+          branch: "notion-import/new-posts"
+          title: "Blog: Import new posts from Notion"
+          body: |
+            This PR contains new posts synced from Notion.
+            Please review the markdown formats and merge.
+          delete-branch: true
