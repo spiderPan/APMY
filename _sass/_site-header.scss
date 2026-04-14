@@ -57,14 +57,14 @@
   display: inline-block;
   margin: 0 0 0 15px;
   a {
-    color: _palette(meta);
+    color: var(--color-meta);
     display: inline-block;
     font-size: 0.88889rem;
     font-weight: bold;
-    padding: 5px 0;
+    padding: 10px 5px; /* Larger tap targets */
     text-decoration: none;
     &:hover {
-      color: _palette(accent);
+      color: var(--color-accent);
     }
   }
 }
@@ -111,7 +111,7 @@
 
   .site-navigation {
     -webkit-overflow-scrolling: touch;
-    background: rgba(255, 255, 255, 0.96); /* Slightly transparent background for modern look */
+    background: var(--color-surface-translucent); /* Slightly transparent background for modern look */
     backdrop-filter: blur(10px); /* Frosted glass effect */
     -webkit-backdrop-filter: blur(10px);
     bottom: 0;
