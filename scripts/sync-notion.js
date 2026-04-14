@@ -54,7 +54,6 @@ async function syncNotion() {
     const author = page.properties.Author?.select?.name || "pan";
     const description = page.properties.Description?.rich_text[0]?.plain_text || "";
     const tags = page.properties.Tags?.multi_select?.map(tag => tag.name) || [];
-    const wordCount = page.properties["Word Count"]?.number || 0;
     
     let featureImageUrl = "";
     if (page.properties["Feature Image"]?.files?.length > 0) {
@@ -95,7 +94,6 @@ author: "${author}"
 description: "${description}"
 tags: [${tags.join(', ')}]
 feature_image: "${frontmatterImage}"
-word_count: ${wordCount}
 ---
 
 ${mdString.parent}
