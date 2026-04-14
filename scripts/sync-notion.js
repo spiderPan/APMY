@@ -34,19 +34,19 @@ async function syncNotion() {
     process.exit(1);
   }
 
-  console.log("Querying Notion Database for 'Ready for Review' posts...");
-  const response = await notion.databases.query({
-    database_id: databaseId,
+  console.log("Querying Notion Database for 'In Review' posts...");
+  const response = await notion.dataSources.query({
+    data_source_id: databaseId,
     filter: {
       property: "Status",
       status: {
-        equals: "Ready for Review"
+        equals: "In Review"
       }
     }
   });
 
   const pages = response.results;
-  console.log(`Found ${pages.length} posts ready for review.`);
+  console.log(`Found ${pages.length} posts In Review.`);
 
   for (const page of pages) {
     const title = page.properties.Name.title[0]?.plain_text || "Untitled";

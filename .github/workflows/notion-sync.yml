@@ -46,7 +46,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "blog: Import latest Ready for Review posts from Notion"
+          commit-message: "blog: Import latest In Review posts from Notion"
           branch: "notion-import/new-posts"
           title: "Blog: Import new posts from Notion"
           body: |
