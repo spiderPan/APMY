@@ -61,8 +61,16 @@
 .post-tags {
   a {
     display: inline-block;
-    padding: 0.3em 0.8em;
-    margin: 0 0.3em 0.3em 0;
+    vertical-align: middle;
+    padding: 0.2em 0.8em;
+    margin: 0 0.3em 0.1em 0;
+    
+    @media only screen and (max-width: 600px) {
+      position: relative;
+      top: -1px;
+      margin-bottom: 0;
+    }
+
     border-radius: 50px;
     background: color-mix(in srgb, var(--color-accent) 8%, transparent);
     color: var(--color-accent);
