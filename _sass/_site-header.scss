@@ -12,6 +12,11 @@
   display: flex;
   padding-bottom: 3.33333em;
   padding-top: 2.5em;
+
+  @media only screen and (max-width: 600px) {
+    padding-bottom: 2em;
+    padding-top: 1.5em;
+  }
 }
 
 .site-title {
@@ -52,14 +57,14 @@
   display: inline-block;
   margin: 0 0 0 15px;
   a {
-    color: _palette(meta);
+    color: var(--color-meta);
     display: inline-block;
     font-size: 0.88889rem;
     font-weight: bold;
-    padding: 5px 0;
+    padding: 10px 5px; /* Larger tap targets */
     text-decoration: none;
     &:hover {
-      color: _palette(accent);
+      color: var(--color-accent);
     }
   }
 }
@@ -106,7 +111,9 @@
 
   .site-navigation {
     -webkit-overflow-scrolling: touch;
-    background: #fff;
+    background: var(--color-surface-translucent); /* Slightly transparent background for modern look */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    -webkit-backdrop-filter: blur(10px);
     bottom: 0;
     left: 0;
     margin: 0;
@@ -118,6 +125,7 @@
     top: 0;
     visibility: hidden;
     z-index: -1;
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth pop-in animation */
   }
   
   .site-navigation-wrap {
@@ -133,21 +141,25 @@
   }
 
   .menu-item {
-    border-bottom: 1px solid _palette(border);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Softer borders */
     display: block;
     margin: 0;
+    transform: translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     &:last-child {
       border: 0;
     }
     a {
       display: block;
-      padding: 0.5rem 0;
+      padding: 1rem 0; /* Larger tap targets */
+      font-size: 1.1rem; /* Slightly larger text for mobile menu */
     }
   }
 
   .menu--opened {
     .site {
-      height: 100%;
+      /* Keep the scroll locked behind the menu */
+      height: 100vh;
       left: 0;
       overflow: hidden;
       position: fixed;
@@ -165,6 +177,10 @@
 
     .menu {
       opacity: 1;
+    }
+
+    .menu-item {
+      transform: translateY(0); /* Slide items up gracefully */
     }
   }
 }

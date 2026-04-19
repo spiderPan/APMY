@@ -1,24 +1,40 @@
-FROM jekyll/jekyll:4.0.1
+# Stage 1: Build Webpack assets
+FROM node:20-alpine AS webpack-builder
+WORKDIR /srv/jekyll
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run ci-build
 
+# Stage 2: Final Jekyll image
+FROM jekyll/jekyll:4.2.2
 WORKDIR /srv/jekyll
 
-# Copy the Gemfile
-COPY Gemfile ./
+# Install Node.js (Node 16+ on Alpine 3.15)
+RUN apk add --no-cache nodejs npm
 
-# Install gems
-RUN bundle install --clean --force
+# Copy dependencies
+COPY Gemfile package*.json ./
 
-# Copy the rest of the application code
-COPY . .
+# Install Ruby dependencies as root
+RUN bundle install
 
-# Install NPM packages
-COPY --from=node:16-slim /usr/local/bin /usr/local/bin
-COPY --from=node:16-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
+# Set permissions for the jekyll user
+RUN chown -R jekyll:jekyll /srv/jekyll
 
-RUN npm install
+# Switch to jekyll user
+USER jekyll
 
-# Expose port 4000
-EXPOSE 4000
+# Install Node dependencies
+RUN npm install --unsafe-perm
 
-# Run the command
-CMD ["bundle", "exec", "jekyll", "serve"]
+# Copy everything
+COPY --chown=jekyll:jekyll . .
+
+# Copy built assets
+COPY --chown=jekyll:jekyll --from=webpack-builder /srv/jekyll/assets/js/main-bundle.js ./assets/js/
+
+EXPOSE 4000 35729
+
+# Use the Jekyll server directly for stability
+CMD ["npm", "run", "start"]

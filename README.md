@@ -1,6 +1,6 @@
 ### Local setup
 
-1. `docker-compose up`
+1. `docker compose up`
 2. Visit `localhost:4000` in your browser
 
 ### Deploy
@@ -9,10 +9,10 @@ When you push to `master` branch, the site will be automatically deployed to [Gi
 
 ### Commands
 
-- `docker-compose up` - run the site locally
-- `docker-compose run jekyll npm run build` - build the site
-
-- `npm run qrcode https://thepan.cn/` - generate QR code for the URL
+- `docker compose up` - run the site locally
+- `docker compose run jekyll npm run build` - build the site
+- `docker compose run jekyll npm run optimize-books` - generate optimized WebP files for the book viewer
+- `docker compose run jekyll npm run qrcode https://thepan.cn/` - generate QR code for the URL
 
 ### Thanks
 

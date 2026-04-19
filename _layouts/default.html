@@ -5,9 +5,8 @@
     {% include google_analytics.html %}
   {% endif %}
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
-  <meta name="description" content="{{ page.description | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  {% seo %}
   <link rel="canonical" href="{{ page.url | replace:'index.html', '' | absolute_url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }} Feed"
     href="{{ '/feed.xml' | absolute_url }}">
@@ -15,8 +14,18 @@
   <link rel="shortcut icon" href="{{ site.favicon | relative_url }}" type="image/png" />
   {% endif %}
   <!-- Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i%7CNoto+Serif:400,400i,700,700i&display=swap" rel="stylesheet">
   <link href="{{ '/assets/css/style.css' | relative_url }}" rel="stylesheet">
+  
+  <script>
+    // Check local storage for dark mode preference and apply it immediately to prevent FOIT
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  </script>
 </head>
 <body>
 
@@ -32,6 +41,23 @@
   <script src="{{ '/assets/js/plugins.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/custom.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/main-bundle.js' | relative_url }}"></script>
-
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const toggleThemeBtn = document.getElementById('theme-toggle');
+      if (toggleThemeBtn) {
+        toggleThemeBtn.addEventListener('click', function() {
+          let currentTheme = document.documentElement.getAttribute('data-theme');
+          
+          if (!currentTheme) {
+            currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+        });
+      }
+    });
+  </script>
 </body>
 </html>

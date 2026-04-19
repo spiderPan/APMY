@@ -2,6 +2,8 @@
 layout: default
 ---
 
+<div id="reading-progress" class="reading-progress-bar"></div>
+
 <main class="main-content fadeInDown delay_075s">
 
   <article class="post">
@@ -9,11 +11,17 @@ layout: default
       <time class="post-date" datetime="{{ page.date | date: "%Y-%m-%d" }}">{{page.date | date: "%B %-d, %Y" }}</time>
       <h1 id="post-title" class="post-title">{{page.title}}</h1>
       <div class="post-meta">
-        By <span class="post-author">{{ site.data.author.name }}</span>{% if page.tags.size > 0 %}<span class="post-tags"> in {% for tag in page.tags %}<a href="{{ site.baseurl }}/tags/#{{ tag | cgi_escape }}" rel="tag">{{ tag }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}</span>{% endif %}
+        {% assign authors = site.data.authors %}
+        {% assign author_key = page.author | default: "pan" %}
+        {% assign author = authors[author_key] | default: authors["pan"] %}
+        By <span class="post-author">{{ author.name }}</span>
+        {% assign words = page.content | strip_html | strip_newlines | remove: " " | size %}
+        <span class="post-words">&middot; {{ words }} words &middot; {{ words | divided_by: 350 | plus: 1 }} min read</span>
+        {% if page.tags.size > 0 %}<span class="post-tags"> in {% for tag in page.tags %}<a href="{{ site.baseurl }}/tags/#{{ tag | cgi_escape }}" rel="tag">{{ tag }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}</span>{% endif %}
       </div><!-- .post-meta -->
       {% if page.feature_image and page.feature_image != "" %}
       <figure class="post-thumbnail image-card width-wide">
-        <img src="{{ page.feature_image | relative_url }}" alt="{{ page.title }}">
+        <img src="{{ page.feature_image | relative_url }}" alt="{{ page.title }}" loading="lazy">
       </figure><!-- .post-thumbnail -->
       {% endif %}
     </header><!-- .post-header -->
@@ -29,17 +37,17 @@ layout: default
       <button id="download-btn">Download As Image</button>
     </div><!-- .share-post -->
     <div class="author-box">
-      {% if site.data.author.image and site.data.author.image != "" %}
-      <div class="author-avatar" style="background-image: url('{{ site.data.author.image }}')"><span class="screen-reader-text">{{ site.data.author.name }}'s Picture</span></div>
+      {% if author.image and author.image != "" %}
+      <div class="author-avatar" style="background-image: url('{{ author.image }}')"><span class="screen-reader-text">{{ author.name }}'s Picture</span></div>
       {% endif %}
       <div class="author-details">
-        <h2 class="author-title">About {{ site.data.author.name }}</h2>
-        <div class="author-bio">{{ site.data.author.bio | markdownify }}</div>
-        {% if site.data.author.location and site.data.author.location != "" %}
-        <span class="author-location">{{ site.data.author.location}}</span>
+        <h2 class="author-title">About {{ author.name }}</h2>
+        <div class="author-bio">{{ author.bio | markdownify }}</div>
+        {% if author.location and author.location != "" %}
+        <span class="author-location">{{ author.location}}</span>
         {% endif %}
-        {% if site.data.author.url and site.data.author.url != "" %}
-        <span class="author-website"><a href="{{ site.data.author.url }}" target="_blank" rel="noopener">{{ site.data.author.url }}</a></span>
+        {% if author.url and author.url != "" %}
+        <span class="author-website"><a href="{{ author.url }}" target="_blank" rel="noopener">{{ author.url }}</a></span>
         {% endif %}
       </div><!-- .author-details -->
     </div><!-- .author-box -->
@@ -50,3 +58,24 @@ layout: default
   {% endif %}
 
 </main><!-- .main-content -->
+
+<script>
+  // Reading Progress Bar
+  document.addEventListener('scroll', function() {
+    const progressBar = document.getElementById('reading-progress');
+    if (!progressBar) return;
+    const body = document.body;
+    const html = document.documentElement;
+    const windowHeight = window.innerHeight || html.clientHeight;
+    // Calculate total scrollable height
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const scrollableHeight = docHeight - windowHeight;
+    const scrollY = window.pageYOffset || html.scrollTop;
+    
+    let progress = 0;
+    if (scrollableHeight > 0) {
+      progress = (scrollY / scrollableHeight) * 100;
+    }
+    progressBar.style.width = progress + '%';
+  });
+</script>

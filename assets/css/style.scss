@@ -31,14 +31,44 @@ $font: (
 
 // Palette.
 {% assign accent = site.accent_color | default: '#2d72d9' %}
-$palette: (
-  accent:    {{ accent }},
-  primary:   #6b747a,
-  secondary: #2c343c,
-  meta:      #9ba6ad,
-  border:    #d7d7d7,
-  bg:        #fbfbfb
-);
+
+:root {
+  --color-accent: {{ accent }};
+  --color-primary: #4a545c; /* Darker for better WCAG AA contrast */
+  --color-secondary: #2c343c;
+  --color-meta: #828e96; 
+  --color-border: #e2e5e8;
+  --color-bg: #fbfbfb;
+  --color-surface: #ffffff;
+  --color-surface-translucent: rgba(255, 255, 255, 0.96);
+  --color-mark: #fff7c5;
+}
+
+:root[data-theme="dark"] {
+  --color-accent: {{ accent }};
+  --color-primary: #e6e9ec;
+  --color-secondary: #fbfbfb;
+  --color-meta: #a2aeb5;
+  --color-border: #333d45;
+  --color-bg: #121417; /* Deeper dark background */
+  --color-surface: #1a1e23; /* Elevated from bg */
+  --color-surface-translucent: rgba(26, 30, 35, 0.96);
+  --color-mark: #6b5c11; /* Dark-friendly highlight */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-accent: {{ accent }};
+    --color-primary: #e6e9ec;
+    --color-secondary: #fbfbfb;
+    --color-meta: #a2aeb5;
+    --color-border: #333d45;
+    --color-bg: #121417;
+    --color-surface: #1a1e23;
+    --color-surface-translucent: rgba(26, 30, 35, 0.96);
+    --color-mark: #6b5c11;
+  }
+}
 
 // Imports
 @import "functions";
@@ -53,3 +83,4 @@ $palette: (
 @import "site-footer";
 @import "animations";
 @import "prism";
+@import "book-viewer";

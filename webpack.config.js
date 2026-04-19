@@ -8,16 +8,7 @@ module.exports = {
         path: path.resolve(__dirname, "assets/js"),
     },
     module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: [
-                    path.resolve(__dirname, "node_modules"),
-                    path.resolve(__dirname, "bower_components"),
-                ],
-                loader: "babel-loader",
-            },
-        ],
+        rules: [],
     },
     resolve: {
         extensions: [".js"],
