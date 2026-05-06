@@ -6,11 +6,14 @@
   position: fixed;
   top: env(safe-area-inset-top, 0);
   left: 0;
-  height: 4px;
-  background: var(--color-accent);
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--color-accent) 0%,
+    color-mix(in srgb, var(--color-accent) 60%, white) 100%);
   width: 0%;
-  z-index: 10000;
-  transition: width 0.1s ease;
+  z-index: 10001;
+  transition: width 0.08s linear;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-accent) 65%, transparent);
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
@@ -18,17 +21,23 @@
 .post {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  padding: 3.33333em;
-  margin-bottom: 2.5em; /* Replace bottom border with margin separation */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 18px;
+  box-shadow: var(--shadow-md);
+  padding: 3em 3.33333em;
+  margin-bottom: 2.5em;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 
   @media only screen and (max-width: 600px) {
-    padding: 1.5em;
+    padding: 1.6em 1.4em;
     margin-bottom: 1.5em;
-    border-radius: 8px;
+    border-radius: 14px;
   }
+}
+
+/* Listing-page hover lift — only cards that have a "Continue reading" link */
+.post:has(.read-more):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .post-header {
@@ -42,84 +51,164 @@
 .post-date {
   color: _palette(meta);
   display: inline-block;
-  font-size: 14px;
+  font-size: 0.78rem;
   font-weight: bold;
-  margin-bottom: 1.25em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.1em;
 
   @media only screen and (max-width: 600px) {
-    margin-bottom: 0.8em;
+    margin-bottom: 0.7em;
   }
 }
 
 .post-meta {
-  font-family: _font(secondary);
-  font-size: 0.88889rem;
-  font-style: italic;
-  margin-bottom: 1.11111rem;
-}
+  font-family: _font(primary);
+  font-size: 0.82rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.7;
+  color: _palette(meta);
+  margin-bottom: 1.75rem;
 
-.post-tags {
-  a {
+  .post-author {
+    color: _palette(secondary);
+    font-weight: 600;
+  }
+
+  /* Trailing dot lives with the previous chunk, so it never wraps to the
+     start of a new line as a stray leading character. */
+  &__byline:not(:last-child)::after {
+    content: "·";
     display: inline-block;
-    vertical-align: middle;
-    padding: 0.2em 0.8em;
-    margin: 0 0.3em 0.1em 0;
-    
-    @media only screen and (max-width: 600px) {
-      position: relative;
-      top: -1px;
-      margin-bottom: 0;
-    }
+    margin: 0 0.55em;
+    color: var(--color-border);
+    font-weight: 700;
+  }
 
-    border-radius: 50px;
-    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
-    color: var(--color-accent);
-    font-size: 0.85em;
-    text-decoration: none;
-    transition: transform 0.2s ease, background 0.2s ease;
-    
-    &:before {
-      content: "\0023";
-    }
-    
-    &:hover {
-      transform: translateY(-2px);
-      background: color-mix(in srgb, var(--color-accent) 15%, transparent);
-    }
+  .post-tags {
+    /* Tag row: block-level flex always sits below the inline meta text */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 0.85em;
   }
 
   @media only screen and (max-width: 600px) {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 0.8em;
-    a {
-      padding: 0.5em 1em; /* Taller target */
-      margin-bottom: 0.5em;
+    font-size: 0.85rem;
+    margin-bottom: 1.4rem;
+
+    .post-tags { margin-top: 0.7em; }
+  }
+}
+
+.post-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-style: normal;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+    font-family: _font(primary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: none;
+    transition: transform 0.2s ease, background 0.2s ease;
+
+    &::before {
+      content: "#";
+      opacity: 0.55;
+      margin-right: 3px;
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      background: color-mix(in srgb, var(--color-accent) 22%, transparent);
+      text-decoration: none;
+    }
+
+    @media only screen and (max-width: 600px) {
+      padding: 6px 13px;
+      font-size: 0.8rem;
     }
   }
 }
 
 .post-title {
-  font-size: 2rem;
-  margin: 0 0 1rem;
+  font-size: clamp(1.6rem, calc(2.6vw + 0.6rem), 2.25rem);
+  margin: 0 0 0.85em;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 
   @media only screen and (max-width: 600px) {
-    font-size: 1.875rem;
+    font-size: 1.7rem;
     letter-spacing: normal;
-    line-height: 1.35; /* better line height for long chinese titles */
+    line-height: 1.35;
   }
 
   a {
     color: inherit;
     text-decoration: none;
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
+    background-size: 0% 2px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s ease, color 0.3s ease;
+
     &:hover {
       color: _palette(accent);
+      background-size: 100% 2px;
     }
+  }
+}
+
+.post-content {
+  font-size: 1.02rem;
+  line-height: 1.9;
+  color: var(--color-primary);
+
+  p {
+    /* Indent first line a CJK em — feels native for Chinese long-form */
+    text-indent: 0;
+  }
+
+  /* Drop cap on the very first paragraph of solo posts */
+  > p:first-of-type::first-letter {
+    /* Latin drop caps look great; CJK skips this naturally. */
+    /* Avoid faux drop caps for CJK by checking via font feature */
   }
 }
 
 .read-more {
   font-weight: bold;
+  margin-top: 0.5em;
+
+  .read-more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-accent);
+    transition: gap 0.25s ease, color 0.25s ease;
+
+    &::after {
+      content: "\2192";
+      transition: transform 0.25s ease;
+    }
+
+    &:hover {
+      text-decoration: none;
+      gap: 10px;
+      &::after { transform: translateX(2px); }
+    }
+  }
 }
 
 /* Author profile */
@@ -191,55 +280,49 @@
 
 /* Share post */
 .post-share {
-  padding: 1.66667em 0 3.33333em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 1.66667em 0 2.5em;
 
   @media only screen and (max-width: 600px) {
-    padding: 1.5em 0 2.5em;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
+    padding: 1.25em 0 2em;
   }
 
   span {
     color: var(--color-meta);
-    display: inline-block;
+    font-family: _font(secondary);
     font-size: 0.88889em;
-    margin-right: 15px;
-  }
-
-  button {
-    background: var(--color-surface);
+    font-style: italic;
+    margin-right: 6px;
   }
 
   a, button {
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: 3px;
+    border-radius: 999px;
     color: var(--color-primary);
-    display: inline-block;
-    font-size: 14px;
-    margin-bottom: 0.5em;
-    margin-right: 5px;
-    padding: 3px 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 8px 14px;
     text-decoration: none;
-    -webkit-transition: .3s ease;
-    transition: .3s ease;
-
-    @media only screen and (max-width: 600px) {
-      display: inline-block;
-      padding: 8px 12px;
-      background: rgba(0, 0, 0, 0.04);
-      border-radius: 4px;
-      font-size: 0.9em;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-    }
+    transition: border-color .25s ease, color .25s ease, background .25s ease, transform .25s ease;
 
     &:hover {
       border-color: var(--color-accent);
       color: var(--color-accent);
+      background: var(--color-accent-soft);
+      transform: translateY(-1px);
+      text-decoration: none;
     }
+
+    &:active { transform: translateY(0); }
   }
 }
 
