@@ -278,6 +278,20 @@
   }
 }
 
+/* Copy-link button — toggles between label/success via [data-copied] */
+.copy-link-btn {
+  &__success { display: none; }
+
+  &[data-copied] {
+    background: var(--color-accent-soft) !important;
+    border-color: var(--color-accent) !important;
+    color: var(--color-accent) !important;
+
+    .copy-link-btn__label   { display: none; }
+    .copy-link-btn__success { display: inline; }
+  }
+}
+
 /* Share post */
 .post-share {
   display: flex;

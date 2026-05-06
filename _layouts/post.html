@@ -34,6 +34,10 @@ layout: default
     </div><!-- .post-content -->
     <div class="post-share">
       <span>Share:</span>
+      <button type="button" id="copy-link-btn" class="copy-link-btn" data-copy-text="{{ page.url | absolute_url }}">
+        <span class="copy-link-btn__label">Copy link</span>
+        <span class="copy-link-btn__success">Copied!</span>
+      </button>
       <a target="_blank"
         href="https://twitter.com/intent/tweet?text={{ page.title | uri_escape }}&amp;url={{ page.url | absolute_url }}" rel="noopener">Twitter</a>
       <a target="_blank"
