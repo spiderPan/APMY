@@ -1,0 +1,30 @@
+{%- comment -%}
+  Renders an embedded music player based on `page.music` frontmatter.
+  Supported source so far: YouTube (page.music.youtube = video ID).
+  Frontmatter shape:
+    music:
+      title:   Song title (required)
+      artist:  Artist name (optional)
+      youtube: YouTube video ID (e.g. dQw4w9WgXcQ)
+      start:   Optional start time in seconds
+{%- endcomment -%}
+{%- if page.music and page.music.youtube and page.music.youtube != '' -%}
+{%- assign yt_src = 'https://www.youtube-nocookie.com/embed/' | append: page.music.youtube -%}
+{%- if page.music.start -%}{%- assign yt_src = yt_src | append: '?start=' | append: page.music.start -%}{%- endif -%}
+<figure class="music-embed" id="music-player">
+  <iframe class="music-embed__player"
+          src="{{ yt_src }}"
+          title="{{ page.music.title }}{% if page.music.artist %} — {{ page.music.artist }}{% endif %}"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          referrerpolicy="strict-origin-when-cross-origin"
+          loading="lazy"
+          allowfullscreen></iframe>
+  {% if page.music.title %}
+  <figcaption class="music-embed__caption">
+    <span aria-hidden="true">🎵</span>
+    <span class="music-embed__title">{{ page.music.title }}</span>
+    {% if page.music.artist %}<span class="music-embed__artist">— {{ page.music.artist }}</span>{% endif %}
+  </figcaption>
+  {% endif %}
+</figure>
+{%- endif -%}
