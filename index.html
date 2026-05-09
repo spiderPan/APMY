@@ -31,6 +31,13 @@ layout: default
     </header><!-- .post-header -->
     <div class="post-content">
       <p>{{ post.description | default: post.excerpt | strip_html | truncatewords: 50 }}</p>
+      {% if post.music and post.music.title %}
+      <a class="post-music-chip" href="{{ site.baseurl }}{{ post.url }}#music-player">
+        <span aria-hidden="true">🎵</span>
+        <span>{{ post.music.title }}</span>
+        {% if post.music.artist %}<span class="post-music-chip__artist">— {{ post.music.artist }}</span>{% endif %}
+      </a>
+      {% endif %}
       <p class="read-more"><a href="{{ site.baseurl }}{{ post.url }}" class="read-more-link">Continue reading</a></p>
     </div><!-- .post-content -->
   </article><!-- .post -->

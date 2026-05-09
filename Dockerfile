@@ -14,7 +14,7 @@ WORKDIR /srv/jekyll
 RUN apk add --no-cache nodejs npm
 
 # Copy dependencies
-COPY Gemfile package*.json ./
+COPY Gemfile Gemfile.lock package*.json ./
 
 # Install Ruby dependencies as root
 RUN bundle install
