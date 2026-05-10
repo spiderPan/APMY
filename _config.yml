@@ -58,6 +58,11 @@ paginate_path: '/page:num/'
 # Permalinks
 permalink: /:year/:month/:day/:title
 
+# Collections
+collections:
+  phases:
+    output: false
+
 # Conversion
 markdown: kramdown
 
