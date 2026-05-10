@@ -27,7 +27,7 @@ jobs:
       - name: Run Notion Sync Script
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          NOTION_POST_DATABASE_ID: ${{ secrets.NOTION_POST_DATABASE_ID }}
         run: node scripts/sync-notion.js
 
       - name: Ensure files were generated

@@ -32,7 +32,7 @@ The flip-book viewer (`_includes/book_viewer.html`) is reused by multiple posts 
 
 ## Notion → blog sync
 
-`.github/workflows/notion-sync.yml` runs `scripts/sync-notion.js` daily (and on demand). The script queries the Notion DB for pages with status `Ready to Review`, converts them with `notion-to-md`, downloads the Feature Image into `images/YYYYMMDD/cover-<slug>.jpg`, writes `_posts/YYYY-MM-DD-<slug>.md` with Jekyll frontmatter, then flips the Notion status to `In Review`. Output is opened as a PR on branch `notion-import/new-posts` — never push directly to `master`. Required secrets: `NOTION_TOKEN`, `NOTION_DATABASE_ID`.
+`.github/workflows/notion-sync.yml` runs `scripts/sync-notion.js` daily (and on demand). The script queries the Notion DB for pages with status `Ready to Review`, converts them with `notion-to-md`, downloads the Feature Image into `images/YYYYMMDD/cover-<slug>.jpg`, writes `_posts/YYYY-MM-DD-<slug>.md` with Jekyll frontmatter, then flips the Notion status to `In Review`. Output is opened as a PR on branch `notion-import/new-posts` — never push directly to `master`. Required secrets: `NOTION_TOKEN`, `NOTION_POST_DATABASE_ID`.
 
 ## Deploy
 

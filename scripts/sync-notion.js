@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const n2m = new NotionToMarkdown({ notionClient: notion });
-const databaseId = process.env.NOTION_DATABASE_ID;
+const databaseId = process.env.NOTION_POST_DATABASE_ID;
 
 // Helper to download images from Notion
 async function downloadImage(url, filepath) {
@@ -30,7 +30,7 @@ function toSlug(title) {
 
 async function syncNotion() {
   if (!databaseId) {
-    console.error("No NOTION_DATABASE_ID provided.");
+    console.error("No NOTION_POST_DATABASE_ID provided.");
     process.exit(1);
   }
 
