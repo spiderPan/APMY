@@ -2,7 +2,7 @@ name: Sync Notion Phases to Jekyll
 
 on:
   schedule:
-    - cron: "0 13 * * *" # Runs daily at 1pm UTC (offset from posts sync)
+    - cron: "0 13 * * *" # Daily at 9am EDT / 8am EST Toronto (1pm UTC; offset from posts sync)
   workflow_dispatch: # Allows manual trigger from GitHub Actions UI
 
 permissions:
