@@ -1,8 +1,8 @@
-name: notion-post-sync
+name: Notion Phases Sync
 
 on:
   schedule:
-    - cron: "0 12 * * *" # Daily at 8am EDT / 7am EST Toronto (12pm UTC)
+    - cron: "0 13 * * *" # Daily at 9am EDT / 8am EST Toronto (1pm UTC; offset from posts sync)
   workflow_dispatch: # Allows manual trigger from GitHub Actions UI
 
 permissions:
@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  sync_notion:
+  sync_phases:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -24,20 +24,20 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run Notion Sync Script
+      - name: Run Phases Sync Script
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_POST_DATABASE_ID: ${{ secrets.NOTION_POST_DATABASE_ID }}
-        run: node scripts/sync-notion.js
+          NOTION_PHASES_DATABASE_ID: ${{ secrets.NOTION_PHASES_DATABASE_ID }}
+        run: node scripts/sync-phases.js
 
       - name: Ensure files were generated
         id: check_changes
         run: |
           if [[ -z $(git status -s) ]]; then
-            echo "No new posts to sync."
+            echo "No new phases to sync."
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
-            echo "New posts generated from Notion."
+            echo "New phase entries generated from Notion."
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
 
@@ -46,10 +46,10 @@ jobs:
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "blog: Import latest In Review posts from Notion"
-          branch: "notion-import/new-posts"
-          title: "Blog: Import new posts from Notion"
+          commit-message: "phases: Import new entries from Notion"
+          branch: "notion-import/phases"
+          title: "Phases: Import new entries from Notion"
           body: |
-            This PR contains new posts synced from Notion.
-            Please review the markdown formats and merge.
+            This PR contains new phase entries synced from Notion.
+            Please review the content and merge.
           delete-branch: true
