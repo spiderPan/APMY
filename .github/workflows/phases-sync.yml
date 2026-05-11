@@ -1,4 +1,4 @@
-name: Sync Notion Phases to Jekyll
+name: notion-phases-sync
 
 on:
   schedule:

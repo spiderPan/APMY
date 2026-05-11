@@ -1,8 +1,8 @@
-name: Sync Notion to Jekyll
+name: notion-post-sync
 
 on:
   schedule:
-    - cron: "0 12 * * *" # Runs daily at noon UTC
+    - cron: "0 12 * * *" # Daily at 8am EDT / 7am EST Toronto (12pm UTC)
   workflow_dispatch: # Allows manual trigger from GitHub Actions UI
 
 permissions:
