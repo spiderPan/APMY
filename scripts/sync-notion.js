@@ -35,8 +35,17 @@ async function syncNotion() {
   }
 
   console.log("Querying Notion Database for 'Ready to Review' posts...");
-  const response = await notion.databases.query({
-    database_id: databaseId,
+
+  const db = await notion.databases.retrieve({ database_id: databaseId });
+  const dataSourceId = db.data_sources?.[0]?.id;
+  if (!dataSourceId) {
+    console.error("Could not resolve a data source for this database.");
+    process.exit(1);
+  }
+
+  const response = await notion.dataSources.query({
+    data_source_id: dataSourceId,
+    result_type: "page",
     filter: {
       property: "Status",
       status: {
@@ -45,7 +54,7 @@ async function syncNotion() {
     }
   });
 
-  const pages = response.results;
+  const pages = response.results.filter((r) => r.object === "page");
   console.log(`Found ${pages.length} posts Ready to Review.`);
 
   for (const page of pages) {

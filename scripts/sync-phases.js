@@ -8,6 +8,7 @@ require("dotenv").config();
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const n2m = new NotionToMarkdown({ notionClient: notion });
 const databaseId = process.env.NOTION_PHASES_DATABASE_ID;
+const DRY_RUN = process.argv.includes("--dry-run");
 
 function downloadFile(url, filepath) {
   return new Promise((resolve, reject) => {
@@ -55,10 +56,16 @@ async function downloadInlineImages(markdown, dateStr, slug) {
     }
     const filename = `${dateStr}-${slug}-${idx}${ext}`;
     const localPath = path.join(dir, filename);
+    const webPath = `/images/phases/${filename}`;
+
+    if (DRY_RUN) {
+      result = result.split(full).join(`![${alt}](${webPath})`);
+      console.log(`  [DRY RUN] would download inline image → ${webPath}`);
+      continue;
+    }
 
     try {
       await downloadFile(url, localPath);
-      const webPath = `/images/phases/${filename}`;
       result = result.split(full).join(`![${alt}](${webPath})`);
       console.log(`  downloaded inline image → ${webPath}`);
     } catch (err) {
@@ -75,16 +82,29 @@ async function syncPhases() {
     process.exit(1);
   }
 
+  if (DRY_RUN) {
+    console.log("--- DRY RUN: no files will be written, Notion will not be updated ---");
+  }
+
   console.log("Querying Notion Phases database for 'Ready to Review' entries...");
-  const response = await notion.databases.query({
-    database_id: databaseId,
+
+  const db = await notion.databases.retrieve({ database_id: databaseId });
+  const dataSourceId = db.data_sources?.[0]?.id;
+  if (!dataSourceId) {
+    console.error("Could not resolve a data source for this database.");
+    process.exit(1);
+  }
+
+  const response = await notion.dataSources.query({
+    data_source_id: dataSourceId,
+    result_type: "page",
     filter: {
       property: "Status",
       status: { equals: "Ready to Review" },
     },
   });
 
-  const pages = response.results;
+  const pages = response.results.filter((r) => r.object === "page");
   console.log(`Found ${pages.length} phase entries Ready to Review.`);
 
   for (const page of pages) {
@@ -141,8 +161,19 @@ ${mdString.trim()}
 `;
 
     const outPath = path.join(phasesDir, filename);
+    const relPath = path.relative(path.join(__dirname, ".."), outPath);
+
+    if (DRY_RUN) {
+      console.log(`  [DRY RUN] would write ${relPath}`);
+      console.log("  --- frontmatter + body preview ---");
+      console.log(frontmatter.split("\n").map((l) => `    ${l}`).join("\n"));
+      console.log("  --- end preview ---");
+      console.log(`  [DRY RUN] would flip Notion status to 'In Review'`);
+      continue;
+    }
+
     fs.writeFileSync(outPath, frontmatter);
-    console.log(`  wrote ${path.relative(path.join(__dirname, ".."), outPath)}`);
+    console.log(`  wrote ${relPath}`);
 
     console.log(`  flipping Notion status to 'In Review'...`);
     await notion.pages.update({
