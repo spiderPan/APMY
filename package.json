@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "@notionhq/client": "^5.23.1",
-    "concurrently": "^10.0.3",
+    "@notionhq/client": "^5.23.2",
+    "concurrently": "^10.0.4",
     "dom-to-image": "^2.6.0",
     "dotenv": "^17.4.2",
     "notion-to-md": "^3.1.9",
@@ -13,7 +13,7 @@
     "sharp": "^0.35.3"
   },
   "devDependencies": {
-    "webpack": "^5.108.4",
+    "webpack": "^5.109.1",
     "webpack-cli": "^7.2.1"
   },
   "scripts": {
